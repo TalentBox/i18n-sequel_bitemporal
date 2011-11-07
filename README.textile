@@ -1,0 +1,115 @@
+h1. I18n::Backend::SequelBitemporal
+
+This repository contains an "I18n":http://github.com/svenfuchs/i18n Sequel 
+backend storing translations using a bitemporal approach. This allows you go back in time
+in your translations and schedule new translations to appears in the future without
+needing any cron task to run.
+
+Most of the code is a port of the "ActiveRecord backend":http://github.com/svenfuchs/i18n-activerecord from SvenFuchs.
+
+It's compatible with both I18n ~> 0.5.0 (Rails 3.0.x) and ~> 0.6.0 (Rails 3.1.x)
+
+h2. Installation
+
+For Bundler put the following in your Gemfile:
+
+<pre>
+  gem 'i18n-sequel_bitemporal', :require => 'i18n/sequel_bitemporal'
+</pre>
+
+or to track master's HEAD:
+
+<pre>
+  gem 'i18n-sequel_bitemporal',
+      :git => 'git://github.com/TalentBox/i18n-sequel_bitemporal.git',
+      :require => 'i18n/sequel_bitemporal'
+</pre>
+
+Next create a sequel migration with the Rails Generator (if you're using rails-sequel).
+Your migration should look like this:
+
+<pre>
+  class CreateI18nTranslationsMigration < Sequel::Migration
+
+    def up
+      create_table :i18n_translations do
+        primary_key :id
+        String :locale, :null => false
+        String :key, :null => false
+        index [:locale, :key], :unique => true
+      end
+
+      create_table :i18n_translation_versions do
+        primary_key :id
+        foreign_key :master_id, :i18n_translations, :on_delete => :cascade
+        Time        :created_at
+        Time        :expired_at
+        Date        :valid_from
+        Date        :valid_to
+        String :value, :text => true
+        String :interpolations, :text => true
+        TrueClass :is_proc, :null => false, :default => false
+      end
+    end
+    
+    def down
+      drop_table :i18n_translation_versions
+      drop_table :i18n_translations
+    end
+
+  end
+</pre>
+
+With these translation tables you will be able to manage your translation, and add new translations or languages.
+
+To load @I18n::Backend::SequelBitemporal@ into your Rails application, create a new file in *config/initializers* named *locale.rb*.
+
+A simple configuration for your locale.rb could look like this:
+
+<pre>
+  require 'i18n/backend/sequel_bitemporal'
+  I18n.backend = I18n::Backend::SequelBitemporal.new
+</pre>
+
+A more advanced example (Thanks Moritz), which uses YAML files and ActiveRecord for lookups:
+
+Memoization is highly recommended if you use a DB as your backend.
+
+<pre>
+  require 'i18n/backend/sequel_bitemporal'
+  I18n.backend = I18n::Backend::SequelBitemporal.new
+
+  I18n::Backend::SequelBitemporal.send(:include, I18n::Backend::Memoize)
+  I18n::Backend::SequelBitemporal.send(:include, I18n::Backend::Flatten)
+  I18n::Backend::Simple.send(:include, I18n::Backend::Memoize)
+  I18n::Backend::Simple.send(:include, I18n::Backend::Pluralization)
+
+  I18n.backend = I18n::Backend::Chain.new(I18n::Backend::Simple.new, I18n.backend)
+</pre>
+
+h2. Usage
+
+You can now use @I18n.t('Your String')@ to lookup translations in the database.
+
+h2. Runnning tests
+
+<pre>
+gem install bundler
+pushd ci
+BUNDLE_GEMFILE=ci/Gemfile.rails-3.x bundle
+BUNDLE_GEMFILE=ci/Gemfile.rails-3.x-i18n-0.6 bundle
+popd
+BUNDLE_GEMFILE=ci/Gemfile.rails-3.x rake
+BUNDLE_GEMFILE=ci/Gemfile.rails-3.x-i18n-0.6 rake
+</pre>
+
+If you want to see what queries are executed:
+
+<pre>
+DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-3.x rake
+DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-3.x-i18n-0.6 rake
+</pre>
+
+h2. Maintainers
+
+* Jonathan Tron

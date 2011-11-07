@@ -1,5 +1,8 @@
 rvm:
   - 1.9.2
   - 1.9.3
+gemfile:
+  - ci/Gemfile.rails-3.x
+  - ci/Gemfile.rails-3.x-i18n-06
 notifications:
   disabled: true

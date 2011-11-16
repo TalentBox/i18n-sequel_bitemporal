@@ -44,6 +44,12 @@ class I18nBackendSequelBitemporalTest < Test::Unit::TestCase
     assert_equal "Pagina's", I18n.t(:"Pagina's", :locale => :es)
   end
 
+  test "remove translations with nil as value" do
+    I18n.backend.store_translations(:es, :"Pagina's" => nil )
+    translations = I18n::Backend::SequelBitemporal::Translation.locale(:es).lookup("Pagina's").all
+    assert_equal [], translations.map(&:value)
+  end
+
   with_mocha do
     test "missing translations table does not cause an error in #available_locales" do
       I18n::Backend::SequelBitemporal::Translation.expects(:available_locales).raises(::Sequel::Error)

@@ -24,12 +24,14 @@ module I18n
             # Invalidate all keys matching current one:
             # key = foo.bar invalidates foo, foo.bar and foo.bar.*
             Translation.locale(locale).lookup(expand_keys(key)).destroy
-            
-            # Find existing master for locale/key or create a new one
-            translation = Translation.locale(locale).lookup_exactly(expand_keys(key)).limit(1).all.first ||
-                          Translation.new(:locale => locale.to_s, :key => key.to_s)
-            translation.attributes = {:value => value}
-            translation.save
+
+            unless value.nil?
+              # Find existing master for locale/key or create a new one
+              translation = Translation.locale(locale).lookup_exactly(expand_keys(key)).limit(1).all.first ||
+                            Translation.new(:locale => locale.to_s, :key => key.to_s)
+              translation.attributes = {:value => value}
+              translation.save
+            end
           end
         end
 

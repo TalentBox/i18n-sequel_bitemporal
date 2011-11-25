@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'i18n', '>= 0.5', "< 0.7.0"
   s.add_dependency 'sequel', '~> 3.28'
-  s.add_dependency 'sequel_bitemporal', '~> 0.2.0'
+  s.add_dependency 'sequel_bitemporal', '~> 0.3.0'
 
   s.add_development_dependency "test_declarative"
   s.add_development_dependency "mocha"

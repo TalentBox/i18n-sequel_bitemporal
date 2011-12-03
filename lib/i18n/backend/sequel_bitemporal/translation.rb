@@ -119,7 +119,7 @@ module I18n
 
         def_dataset_method :lookup_exactly do |keys|
           keys = Array(keys).map! { |key| key.to_s }
-          eager_graph(:translation_current_version).filter(:key => keys.last)
+          eager_graph(:current_version).filter(:key => keys.last)
         end
         
         def_dataset_method :lookup_and_current do |with_current, keys, *separator|
@@ -131,7 +131,7 @@ module I18n
           end
 
           namespace = "#{keys.last}#{I18n::Backend::Flatten::FLATTEN_SEPARATOR}%"
-          set = eager_graph(:translation_current_version).filter({:key => keys} | :key.like(namespace))
+          set = eager_graph(:current_version).filter({:key => keys} | :key.like(namespace))
           set = set.filter({:translation_current_version__id => nil}.sql_negate) if with_current
           set
         end

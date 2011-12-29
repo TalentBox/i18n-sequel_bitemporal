@@ -10,6 +10,10 @@ module I18n
       module Implementation
         include Base, Flatten
 
+        def initialize(opts= {})
+          @preload_all = opts.fetch(:preload_all, false)
+        end
+
         def available_locales
           begin
             Translation.available_locales
@@ -35,11 +39,29 @@ module I18n
           end
         end
 
+        def clear(locale=:all)
+          if locale==:all
+            @translations = {}
+          else
+            @translations[locale] = nil
+          end
+        end
+
       protected
+
+        def fetch_all_translations(locale)
+          @translations ||= {}
+          @translations[locale] ||= Translation.locale(locale).with_current_version.all
+          @translations[locale]
+        end
 
         def lookup(locale, key, scope = [], options = {})
           key = normalize_flat_keys(locale, key, scope, options[:separator])
-          result = Translation.locale(locale).lookup(key).all
+          result = if @preload_all
+            fetch_all_translations(locale).select{|t| t.key==key}
+          else
+            Translation.locale(locale).lookup(key).all
+          end
 
           if result.empty?
             nil

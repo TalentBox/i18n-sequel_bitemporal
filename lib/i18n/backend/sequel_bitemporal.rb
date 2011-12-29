@@ -12,6 +12,7 @@ module I18n
 
         def initialize(opts= {})
           @preload_all = opts.fetch(:preload_all, false)
+          @translations = {}
         end
 
         def available_locales

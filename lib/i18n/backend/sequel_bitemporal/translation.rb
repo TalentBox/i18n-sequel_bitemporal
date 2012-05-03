@@ -140,6 +140,10 @@ module I18n
           def available_locales
             Translation.distinct.select(:locale).map { |t| t.locale.to_sym }
           end
+
+          def all_for_locale(locale)
+            self.locale(locale).with_current_version.all
+          end
         end
       end
     end

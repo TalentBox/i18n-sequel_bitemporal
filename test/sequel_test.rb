@@ -14,7 +14,7 @@ class I18nBackendSequelBitemporalTest < Test::Unit::TestCase
     clear_all
     super
   end
-  
+
   test "store_translations does not allow ambiguous keys (1)" do
     clear_all
     I18n.backend.store_translations(:en, :foo => 'foo')
@@ -57,7 +57,8 @@ class I18nBackendSequelBitemporalTest < Test::Unit::TestCase
     end
   end
 
-  def test_expand_keys
+  test "expand keys" do
     assert_equal %w(foo foo.bar foo.bar.baz), I18n.backend.send(:expand_keys, :'foo.bar.baz')
   end
+
 end if defined?(Sequel)

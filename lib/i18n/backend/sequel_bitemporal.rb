@@ -13,6 +13,7 @@ module I18n
         def initialize(opts= {})
           @preload_all = opts.fetch(:preload_all, false)
           @translations = {}
+          @cache_times = {}
         end
 
         def available_locales
@@ -40,10 +41,13 @@ module I18n
           end
         end
 
-        def clear(locale=:all)
+        def clear(locale=:all, options={})
           if locale==:all
-            @translations = {}
+            @translations.keys.each{|loc| clear loc, options }
           else
+            last_update = options[:last_update]
+            cache_time = @cache_times[locale]
+            return if last_update && cache_time && last_update < cache_time
             @translations[locale] = nil
           end
         end
@@ -52,7 +56,10 @@ module I18n
 
         def fetch_all_translations(locale)
           @translations ||= {}
-          @translations[locale] ||= Translation.locale(locale).with_current_version.all
+          @translations[locale] ||= begin
+            @cache_times[locale] = Time.now
+            Translation.all_for_locale(locale)
+          end
           @translations[locale]
         end
 

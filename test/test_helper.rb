@@ -9,6 +9,7 @@ require 'i18n/sequel_bitemporal'
 require 'i18n/tests'
 require 'mocha'
 require 'test_declarative'
+require 'timecop'
 I18n::Tests.setup_sequel
 
 class Test::Unit::TestCase

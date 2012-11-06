@@ -1,4 +1,5 @@
-require 'sequel'
+require "sequel"
+require "forwardable"
 
 module I18n
   module Backend

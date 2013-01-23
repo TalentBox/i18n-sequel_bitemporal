@@ -1,5 +1,5 @@
 module I18n
   module SequelBitemporal
-    VERSION = "0.5.1"
+    VERSION = "0.6.1"
   end
 end

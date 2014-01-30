@@ -2,7 +2,7 @@ require File.expand_path('../test_helper', __FILE__)
 
 class I18nBackendSequelBitemporalTest < Test::Unit::TestCase
   def clear_all
-    I18n::Backend::SequelBitemporal::Translation.delete
+    I18n::Backend::SequelBitemporal::Translation.dataset.delete
   end
 
   def setup

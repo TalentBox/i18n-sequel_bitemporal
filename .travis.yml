@@ -1,8 +1,15 @@
 rvm:
   - 1.9.2
   - 1.9.3
+  - 2.0.0
+  - 2.1.0
+  - jruby-19mode
+env:
+  - ADAPTER=sqlite3
+  - ADAPTER=postgres
 gemfile:
   - ci/Gemfile.rails-3.x
   - ci/Gemfile.rails-3.x-i18n-0.6
-notifications:
-  disabled: true
+before_script:
+  - mysql -e 'create database i18n_sequel_bitemporal;'
+  - psql -c 'create database i18n_sequel_bitemporal;' -U postgres

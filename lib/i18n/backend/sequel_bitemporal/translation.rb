@@ -14,7 +14,7 @@ module I18n
     #   String :key, :null => false
     #   index [:locale, :key], :unique => true
     # end
-    # 
+    #
     # create_table :i18n_translation_versions do
     #   primary_key :id
     #   foreign_key :master_id, :i18n_translations, :on_delete => :cascade
@@ -71,7 +71,7 @@ module I18n
         def interpolations
           super || []
         end
-        
+
         def interpolates?(key)
           self.interpolations.include?(key) if self.interpolations
         end
@@ -99,13 +99,13 @@ module I18n
           super(value)
         end
       end
-      
+
       class Translation < ::Sequel::Model(:i18n_translations)
         extend Forwardable
         plugin :bitemporal, version_class: TranslationVersion
-        
+
         delegate [:value, :interpolations, :interpolates?] => :pending_or_current_version
-        
+
         def_dataset_method :locale do |locale|
           filter(:locale => locale.to_s)
         end
@@ -122,7 +122,7 @@ module I18n
           keys = Array(keys).map! { |key| key.to_s }
           eager_graph(:current_version).filter(:key => keys.last)
         end
-        
+
         def_dataset_method :lookup_and_current do |with_current, keys, *separator|
           keys = Array(keys).map! { |key| key.to_s }
 
@@ -132,8 +132,8 @@ module I18n
           end
 
           namespace = "#{keys.last}#{I18n::Backend::Flatten::FLATTEN_SEPARATOR}%"
-          set = eager_graph(:current_version).filter({:key => keys} | :key.like(namespace))
-          set = set.filter({:translation_current_version__id => nil}.sql_negate) if with_current
+          set = eager_graph(:current_version).where(Sequel.|({:key => keys}, Sequel.like(:key, namespace)))
+          set = set.exclude_where({:translation_current_version__id => nil}) if with_current
           set
         end
 

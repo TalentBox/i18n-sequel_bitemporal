@@ -8,12 +8,12 @@ class I18nSequelBitemporalMissingTest < Test::Unit::TestCase
   def setup
     I18n.backend.store_translations(:en, :bar => 'Bar', :i18n => { :plural => { :keys => [:zero, :one, :other] } })
     I18n.backend = I18n::Backend::Chain.new(Backend.new, I18n.backend)
-    I18n::Backend::SequelBitemporal::Translation.delete
+    I18n::Backend::SequelBitemporal::Translation.dataset.delete
   end
 
   test "can persist interpolations" do
     translation = I18n::Backend::SequelBitemporal::Translation.new(:key => 'foo', :locale => :en)
-    translation.attributes = {:value => 'bar', :interpolations => %w(count name)} 
+    translation.attributes = {:value => 'bar', :interpolations => %w(count name)}
     translation.save
     assert translation.valid?
   end

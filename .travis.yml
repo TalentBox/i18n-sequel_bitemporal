@@ -5,7 +5,7 @@ rvm:
   - 2.1.0
   - jruby-19mode
 env:
-  - ADAPTER=sqlite3
+  - ADAPTER=mysql
   - ADAPTER=postgres
 gemfile:
   - ci/Gemfile.rails-3.x

@@ -9,5 +9,13 @@ env:
 gemfile:
   - ci/Gemfile.rails-3.x
   - ci/Gemfile.rails-3.x-i18n-0.6
+matrix:
+  exclude:
+    - rvm: jruby-19mode
+      env: ADAPTER=sqlite3
+      gemfile: ci/Gemfile.rails-3.x
+    - rvm: jruby-19mode
+      env: ADAPTER=sqlite3
+      gemfile: ci/Gemfile.rails-3.x-i18n-0.6
 before_script:
   - psql -c 'create database i18n_sequel_bitemporal;' -U postgres

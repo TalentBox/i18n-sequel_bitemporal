@@ -6,13 +6,15 @@ class I18nBackendSequelBitemporalTest < Test::Unit::TestCase
   end
 
   def setup
+    super
+    I18n::Backend::SequelBitemporal::Translation.unstub(:available_locales)
     I18n.backend = I18n::Backend::SequelBitemporal.new
     store_translations(:en, :foo => { :bar => 'bar', :baz => 'baz' })
   end
 
   def teardown
-    clear_all
     super
+    clear_all
   end
 
   test "store_translations does not allow ambiguous keys (1)" do

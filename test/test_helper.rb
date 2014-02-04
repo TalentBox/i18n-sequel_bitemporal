@@ -7,7 +7,7 @@ require 'bundler/setup'
 $:.unshift File.expand_path("../lib", File.dirname(__FILE__))
 require 'i18n/sequel_bitemporal'
 require 'i18n/tests'
-require 'mocha'
+require 'mocha/test_unit'
 require 'test_declarative'
 require 'timecop'
 I18n::Tests.setup_sequel

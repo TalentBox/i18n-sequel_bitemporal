@@ -1,0 +1,40 @@
+PATH
+  remote: ../
+  specs:
+    i18n-sequel_bitemporal (0.7.0)
+      i18n (>= 0.5, < 0.7.0)
+      sequel_bitemporal (~> 0.7.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    i18n (0.5.3)
+    jdbc-mysql (5.1.28)
+    jdbc-postgres (9.3.1100)
+    jdbc-sqlite3 (3.7.2.1)
+    metaclass (0.0.2)
+    mocha (1.0.0)
+      metaclass (~> 0.0.1)
+    rake (10.1.1)
+    sequel (4.7.0)
+    sequel_bitemporal (0.7.0)
+      sequel (>= 3.30, < 5.0)
+    test_declarative (0.0.5)
+    timecop (0.7.1)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  i18n (~> 0.5.0)
+  i18n-sequel_bitemporal!
+  jdbc-mysql
+  jdbc-postgres
+  jdbc-sqlite3
+  mocha
+  mysql
+  pg
+  rake
+  sqlite3
+  test_declarative
+  timecop

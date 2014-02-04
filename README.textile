@@ -1,6 +1,6 @@
 h1. I18n::Backend::SequelBitemporal
 
-This repository contains an "I18n":http://github.com/svenfuchs/i18n Sequel 
+This repository contains an "I18n":http://github.com/svenfuchs/i18n Sequel
 backend storing translations using a bitemporal approach. This allows you go back in time
 in your translations and schedule new translations to appears in the future without
 needing any cron task to run.
@@ -51,7 +51,7 @@ Your migration should look like this:
         TrueClass :is_proc, :null => false, :default => false
       end
     end
-    
+
     def down
       drop_table :i18n_translation_versions
       drop_table :i18n_translations
@@ -95,10 +95,8 @@ h2. Runnning tests
 
 <pre>
 gem install bundler
-pushd ci
 BUNDLE_GEMFILE=ci/Gemfile.rails-3.x bundle
 BUNDLE_GEMFILE=ci/Gemfile.rails-3.x-i18n-0.6 bundle
-popd
 BUNDLE_GEMFILE=ci/Gemfile.rails-3.x rake
 BUNDLE_GEMFILE=ci/Gemfile.rails-3.x-i18n-0.6 rake
 </pre>

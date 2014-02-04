@@ -6,14 +6,16 @@ class I18nBackendSequelBitemporalCacheTest < Test::Unit::TestCase
   end
 
   def setup
+    super
+    I18n::Backend::SequelBitemporal::Translation.unstub(:all_for_locale)
     I18n.backend = I18n::Backend::SequelBitemporal.new :preload_all => true
     store_translations(:en, :foo => { :bar => 'bar', :baz => 'baz' })
     store_translations(:fr, :foo => { :bar => 'bar', :baz => 'baz' })
   end
 
   def teardown
-    clear_all
     super
+    clear_all
   end
 
   with_mocha do

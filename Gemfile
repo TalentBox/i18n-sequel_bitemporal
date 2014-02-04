@@ -3,6 +3,11 @@ source "https://rubygems.org"
 # Specify your gem"s dependencies in i18n-sequel.gemspec
 gemspec
 
+gem "test_declarative"
+gem "mocha"
+gem "rake"
+gem "timecop"
+
 platforms :ruby do
   gem "pg"
   gem "mysql"

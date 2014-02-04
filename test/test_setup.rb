@@ -49,8 +49,10 @@ module I18n
       def connect_sequel
         connect_adapter
         ::Sequel.extension :migration
-        ::Sequel::Model.db.drop_table? :i18n_translations, cascade: true
-        ::Sequel::Model.db.drop_table? :i18n_translation_versions, cascade: true
+        opts = {}
+        opts[:cascade] = true if options[:adapter].to_sym==:postgres
+        ::Sequel::Model.db.drop_table? :i18n_translations, opts
+        ::Sequel::Model.db.drop_table? :i18n_translation_versions, opts
         ::Sequel.migration do
           change do
             create_table :i18n_translations do

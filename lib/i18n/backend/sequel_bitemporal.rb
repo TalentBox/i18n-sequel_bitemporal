@@ -58,7 +58,7 @@ module I18n
           @translations ||= {}
           @translations[locale] ||= begin
             @cache_times[locale] = Time.now
-            Translation.all_for_locale(locale)
+            Translation.all_for_locale(locale).group_by(&:key)
           end
           @translations[locale]
         end
@@ -66,7 +66,7 @@ module I18n
         def lookup(locale, key, scope = [], options = {})
           key = normalize_flat_keys(locale, key, scope, options[:separator])
           result = if @preload_all
-            fetch_all_translations(locale).select{|t| t.key==key}
+            fetch_all_translations(locale)[key] || []
           else
             Translation.locale(locale).lookup(key).all
           end

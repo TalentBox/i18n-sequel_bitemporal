@@ -12,7 +12,6 @@ env:
   - ADAPTER=postgres
 gemfile:
   - ci/Gemfile.rails-3.2
-  - ci/Gemfile.rails-3.2-i18n-0.6
   - ci/Gemfile.rails-4.0
   - ci/Gemfile.rails-4.1
   - ci/Gemfile.rails-4.2
@@ -21,9 +20,6 @@ matrix:
     - rvm: jruby-19mode
       env: ADAPTER=sqlite3
       gemfile: ci/Gemfile.rails-3.2
-    - rvm: jruby-19mode
-      env: ADAPTER=sqlite3
-      gemfile: ci/Gemfile.rails-3.2-i18n-0.6
     - rvm: jruby-19mode
       env: ADAPTER=sqlite3
       gemfile: ci/Gemfile.rails-4.0

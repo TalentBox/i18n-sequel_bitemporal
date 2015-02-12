@@ -1,6 +1,6 @@
 require File.expand_path('../test_helper', __FILE__)
 
-class I18nBackendSequelBitemporalCacheTest < Test::Unit::TestCase
+class I18nBackendSequelBitemporalCacheTest < I18nBitemporalTest
   def clear_all
     I18n::Backend::SequelBitemporal::Translation.dataset.delete
   end

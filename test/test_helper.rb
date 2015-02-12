@@ -12,17 +12,25 @@ require 'test_declarative'
 require 'timecop'
 I18n::Tests.setup_sequel
 
-class Test::Unit::TestCase
+class I18nBitemporalTest < Test::Unit::TestCase
   def self.with_mocha
     yield if Object.respond_to?(:expects)
   end
 
+  def setup
+    super
+    I18n.enforce_available_locales = false
+  end
+
   def teardown
     I18n.locale = nil
-    I18n.default_locale = :en
-    I18n.load_path = []
+    I18n.default_locale = nil
+    I18n.load_path = nil
     I18n.available_locales = nil
     I18n.backend = nil
+    I18n.default_separator = nil
+    I18n.enforce_available_locales = true
+    super
   end
 
   def translations

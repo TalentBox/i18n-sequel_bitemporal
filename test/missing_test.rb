@@ -1,11 +1,12 @@
 require File.expand_path('../test_helper', __FILE__)
 
-class I18nSequelBitemporalMissingTest < Test::Unit::TestCase
+class I18nSequelBitemporalMissingTest < I18nBitemporalTest
   class Backend < I18n::Backend::SequelBitemporal
     include I18n::Backend::SequelBitemporal::Missing
   end
 
   def setup
+    super
     I18n.backend.store_translations(:en, :bar => 'Bar', :i18n => { :plural => { :keys => [:zero, :one, :other] } })
     I18n.backend = I18n::Backend::Chain.new(Backend.new, I18n.backend)
     I18n::Backend::SequelBitemporal::Translation.dataset.delete
@@ -68,4 +69,3 @@ class I18nSequelBitemporalMissingTest < Test::Unit::TestCase
   end
 
 end if defined?(Sequel)
-

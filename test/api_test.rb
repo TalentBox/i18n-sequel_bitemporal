@@ -1,6 +1,6 @@
 require File.expand_path('../test_helper', __FILE__)
 
-class I18nSequelBitemporalApiTest < Test::Unit::TestCase
+class I18nSequelBitemporalApiTest < I18nBitemporalTest
   def setup
     I18n::Backend::SequelBitemporal::Translation.dataset.delete
     I18n.backend = I18n::Backend::SequelBitemporal.new
@@ -28,4 +28,3 @@ class I18nSequelBitemporalApiTest < Test::Unit::TestCase
     assert_equal I18n::Backend::SequelBitemporal, I18n.backend.class
   end
 end if defined?(Sequel)
-

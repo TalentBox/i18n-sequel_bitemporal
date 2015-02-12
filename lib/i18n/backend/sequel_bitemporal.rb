@@ -7,6 +7,22 @@ module I18n
       autoload :StoreProcs,  'i18n/backend/sequel_bitemporal/store_procs'
       autoload :Translation, 'i18n/backend/sequel_bitemporal/translation'
 
+      def self.master_table_name=(table_name)
+        @master_table_name = table_name
+      end
+
+      def self.master_table_name
+        @master_table_name || :i18n_translations
+      end
+
+      def self.version_table_name=(table_name)
+        @version_table_name = table_name
+      end
+
+      def self.version_table_name
+        @version_table_name || :i18n_translation_versions
+      end
+
       module Implementation
         include Base, Flatten
 

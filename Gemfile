@@ -3,6 +3,7 @@ source "https://rubygems.org"
 # Specify your gem"s dependencies in i18n-sequel.gemspec
 gemspec
 
+gem "test-unit"
 gem "test_declarative"
 gem "mocha"
 gem "rake"

@@ -21,7 +21,7 @@ or to track master's HEAD:
 
 <pre>
   gem 'i18n-sequel_bitemporal',
-      :git => 'git://github.com/TalentBox/i18n-sequel_bitemporal.git',
+      :github => 'TalentBox/i18n-sequel_bitemporal',
       :require => 'i18n/sequel_bitemporal'
 </pre>
 
@@ -85,6 +85,23 @@ Memoization is highly recommended if you use a DB as your backend.
   I18n::Backend::Simple.send(:include, I18n::Backend::Pluralization)
 
   I18n.backend = I18n::Backend::Chain.new(I18n::Backend::Simple.new, I18n.backend)
+</pre>
+
+You can also customize table names for the backing models:
+
+<pre>
+  require 'i18n/backend/sequel_bitemporal'
+  I18n::Backend::SequelBitemporal.master_table_name = :my_translations
+  I18n::Backend::SequelBitemporal.version_table_name = :my_translation_versions
+</pre>
+
+Please note names can be anything you can use in `Sequel::Model#set_dataset`.
+For example you want your translations table to be in a specific schema:
+
+<pre>
+  require 'i18n/backend/sequel_bitemporal'
+  I18n::Backend::SequelBitemporal.master_table_name = Sequel.qualify(:translations, :i18n_translations)
+  I18n::Backend::SequelBitemporal.version_table_name = Sequel.qualify(:translations, :i18n_translation_versions)
 </pre>
 
 h2. Usage

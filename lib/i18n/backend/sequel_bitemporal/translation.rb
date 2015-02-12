@@ -57,7 +57,7 @@ module I18n
     #   Translation.find_by_locale_and_key('en', 'foo').value
     #   # => 'FOO'
     class SequelBitemporal
-      class TranslationVersion < ::Sequel::Model(:i18n_translation_versions)
+      class TranslationVersion < ::Sequel::Model(::I18n::Backend::SequelBitemporal.version_table_name)
         plugin :serialization
 
         TRUTHY_CHAR = "\001"
@@ -100,7 +100,7 @@ module I18n
         end
       end
 
-      class Translation < ::Sequel::Model(:i18n_translations)
+      class Translation < ::Sequel::Model(::I18n::Backend::SequelBitemporal.master_table_name)
         extend Forwardable
         plugin :bitemporal, version_class: TranslationVersion
 

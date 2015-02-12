@@ -63,4 +63,59 @@ class I18nBackendSequelBitemporalTest < Test::Unit::TestCase
     assert_equal %w(foo foo.bar foo.bar.baz), I18n.backend.send(:expand_keys, :'foo.bar.baz')
   end
 
+  test "allows to override the table names" do
+    ::Sequel::Model.db.transaction :rollback => :always do
+      begin
+        ::Sequel.migration do
+          change do
+            create_table :another_i18n_translations do
+              primary_key :id
+              String :locale, :null => false
+              String :key, :null => false
+              index [:locale, :key], :unique => true
+            end
+
+            create_table :another_i18n_translation_versions do
+              primary_key :id
+              foreign_key :master_id, :another_i18n_translations, :on_delete => :cascade
+              Time        :created_at
+              Time        :expired_at
+              Date        :valid_from
+              Date        :valid_to
+              String :value, :text => true
+              String :interpolations, :text => true
+              TrueClass :is_proc, :null => false, :default => false
+            end
+          end
+        end.apply(::Sequel::Model.db, :up)
+        change_table_names(
+          :another_i18n_translations,
+          :another_i18n_translation_versions
+        )
+
+        assert_equal(
+          ::I18n::Backend::SequelBitemporal::Translation.table_name,
+          :another_i18n_translations
+        )
+        assert_equal(
+          ::I18n::Backend::SequelBitemporal::TranslationVersion.table_name,
+          :another_i18n_translation_versions
+        )
+      ensure
+        change_table_names nil, nil
+      end
+    end
+  end
+
+  def change_table_names(master_name, version_name)
+    ::I18n::Backend::SequelBitemporal.master_table_name = master_name
+    ::I18n::Backend::SequelBitemporal.version_table_name = version_name
+    ::I18n::Backend::SequelBitemporal.send :remove_const, :Translation
+    ::I18n::Backend::SequelBitemporal.send :remove_const, :TranslationVersion
+    load File.expand_path(
+      "../../lib/i18n/backend/sequel_bitemporal/translation.rb",
+      __FILE__
+    )
+  end
+
 end if defined?(Sequel)

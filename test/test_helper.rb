@@ -12,6 +12,8 @@ require 'test_declarative'
 require 'timecop'
 I18n::Tests.setup_sequel
 
+Sequel::Deprecation.output = false
+
 class I18nBitemporalTest < Test::Unit::TestCase
   def self.with_mocha
     yield if Object.respond_to?(:expects)

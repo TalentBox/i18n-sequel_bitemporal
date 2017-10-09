@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gemspec :path => "../"
 
-gem 'railties', '~> 3.2.0'
+gem 'railties', '~> 5.0.0'
 
 gem "test-unit"
 gem "test_declarative"
@@ -12,12 +12,10 @@ gem "timecop"
 
 platforms :ruby do
   gem "pg"
-  gem "mysql"
   gem "sqlite3"
 end
 
 platforms :jruby do
   gem "jdbc-postgres"
-  gem "jdbc-mysql"
   gem "jdbc-sqlite3"
 end

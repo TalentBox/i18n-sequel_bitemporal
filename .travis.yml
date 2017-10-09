@@ -1,33 +1,33 @@
 language: ruby
 cache: bundler
 sudo: false
+before_script:
+  - psql -c 'create database i18n_sequel_bitemporal;' -U postgres
 rvm:
-  - 1.9.3
-  - 2.0
-  - 2.1
-  - 2.2
-  - jruby-19mode
+  - 2.2.7
+  - 2.3.4
+  - 2.4.2
+  - jruby-9.0.5.0
+  - jruby-9.1.13.0
 env:
   - ADAPTER=sqlite3
   - ADAPTER=postgres
 gemfile:
-  - ci/Gemfile.rails-3.2
   - ci/Gemfile.rails-4.0
   - ci/Gemfile.rails-4.1
   - ci/Gemfile.rails-4.2
+  - ci/Gemfile.rails-5.0
+  - ci/Gemfile.rails-5.1
 matrix:
   exclude:
-    - rvm: jruby-19mode
-      env: ADAPTER=sqlite3
-      gemfile: ci/Gemfile.rails-3.2
-    - rvm: jruby-19mode
-      env: ADAPTER=sqlite3
-      gemfile: ci/Gemfile.rails-4.0
-    - rvm: jruby-19mode
-      env: ADAPTER=sqlite3
-      gemfile: ci/Gemfile.rails-4.1
-    - rvm: jruby-19mode
-      env: ADAPTER=sqlite3
-      gemfile: ci/Gemfile.rails-4.2
-before_script:
-  - psql -c 'create database i18n_sequel_bitemporal;' -U postgres
+    allow_failures:
+      - rvm: jruby-9.0.5.0
+        gemfile: ci/rails-4.2.gemfile
+      - rvm: jruby-9.0.5.0
+        gemfile: ci/rails-5.0.gemfile
+      - gemfile: ci/rails-5.1.gemfile
+    exclude:
+      - rvm: 2.4.2
+        gemfile: ci/rails-4.0.gemfile
+      - rvm: 2.4.2
+        gemfile: ci/rails-4.1.gemfile

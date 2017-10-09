@@ -11,12 +11,10 @@ gem "timecop"
 
 platforms :ruby do
   gem "pg"
-  gem "mysql"
   gem "sqlite3"
 end
 
 platforms :jruby do
   gem "jdbc-postgres"
-  gem "jdbc-mysql"
   gem "jdbc-sqlite3"
 end

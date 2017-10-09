@@ -133,7 +133,7 @@ module I18n
 
           namespace = "#{keys.last}#{I18n::Backend::Flatten::FLATTEN_SEPARATOR}%"
           set = eager_graph(:current_version).where(Sequel.|({:key => keys}, Sequel.like(:key, namespace)))
-          set = set.exclude_where({:translation_current_version__id => nil}) if with_current
+          set = set.exclude({Sequel.qualify(:translation_current_version, :id) => nil}) if with_current
           set
         end
 

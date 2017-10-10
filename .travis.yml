@@ -7,7 +7,6 @@ rvm:
   - 2.2.7
   - 2.3.4
   - 2.4.2
-  - jruby-9.0.5.0
   - jruby-9.1.13.0
 env:
   - ADAPTER=sqlite3
@@ -21,11 +20,8 @@ gemfile:
 matrix:
   exclude:
     allow_failures:
-      - rvm: jruby-9.0.5.0
-        gemfile: ci/rails-4.2.gemfile
-      - rvm: jruby-9.0.5.0
-        gemfile: ci/rails-5.0.gemfile
-      - gemfile: ci/rails-5.1.gemfile
+      - rvm: jruby-9.1.13.0
+        env: ADAPTER=sqlite3
     exclude:
       - rvm: 2.4.2
         gemfile: ci/rails-4.0.gemfile

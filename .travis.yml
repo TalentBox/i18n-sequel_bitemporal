@@ -18,12 +18,6 @@ gemfile:
   - ci/Gemfile.rails-5.0
   - ci/Gemfile.rails-5.1
 matrix:
-  exclude:
-    allow_failures:
-      - rvm: jruby-9.1.13.0
-        env: ADAPTER=sqlite3
-    exclude:
-      - rvm: 2.4.2
-        gemfile: ci/rails-4.0.gemfile
-      - rvm: 2.4.2
-        gemfile: ci/rails-4.1.gemfile
+  allow_failures:
+    - rvm: jruby-9.1.13.0
+      env: ADAPTER=sqlite3

@@ -4,10 +4,9 @@ sudo: false
 before_script:
   - psql -c 'create database i18n_sequel_bitemporal;' -U postgres
 rvm:
-  - 2.2.7
-  - 2.3.4
-  - 2.4.2
-  - jruby-9.1.13.0
+  - 2.3.8
+  - 2.4.5
+  - 2.5.3
 env:
   - ADAPTER=sqlite3
   - ADAPTER=postgres
@@ -17,7 +16,4 @@ gemfile:
   - ci/Gemfile.rails-4.2
   - ci/Gemfile.rails-5.0
   - ci/Gemfile.rails-5.1
-matrix:
-  allow_failures:
-    - rvm: jruby-9.1.13.0
-      env: ADAPTER=sqlite3
+  - ci/Gemfile.rails-5.2

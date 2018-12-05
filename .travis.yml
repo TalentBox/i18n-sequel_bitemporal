@@ -11,9 +11,6 @@ env:
   - ADAPTER=sqlite3
   - ADAPTER=postgres
 gemfile:
-  - ci/Gemfile.rails-4.0
-  - ci/Gemfile.rails-4.1
-  - ci/Gemfile.rails-4.2
   - ci/Gemfile.rails-5.0
   - ci/Gemfile.rails-5.1
   - ci/Gemfile.rails-5.2

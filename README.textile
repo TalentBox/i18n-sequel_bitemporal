@@ -9,7 +9,7 @@ needing any cron task to run.
 
 Most of the code is a port of the "ActiveRecord backend":http://github.com/svenfuchs/i18n-activerecord from SvenFuchs.
 
-It's compatible with both I18n ~> 0.5.0 (Rails 3.0.x) and ~> 0.6.0 (Rails 3.1.x)
+It's compatible with I18n >= 1.0.0 (Rails 5.x)
 
 h2. Installation
 
@@ -114,17 +114,17 @@ h2. Runnning tests
 
 <pre>
 gem install bundler
-BUNDLE_GEMFILE=ci/Gemfile.rails-3.x bundle
-BUNDLE_GEMFILE=ci/Gemfile.rails-3.x-i18n-0.6 bundle
-BUNDLE_GEMFILE=ci/Gemfile.rails-3.x rake
-BUNDLE_GEMFILE=ci/Gemfile.rails-3.x-i18n-0.6 rake
+BUNDLE_GEMFILE=ci/Gemfile.rails-5.x bundle
+BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 bundle
+BUNDLE_GEMFILE=ci/Gemfile.rails-5.x rake
+BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 rake
 </pre>
 
 If you want to see what queries are executed:
 
 <pre>
-DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-3.x rake
-DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-3.x-i18n-0.6 rake
+DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-5.x rake
+DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 rake
 </pre>
 
 h2. Maintainers

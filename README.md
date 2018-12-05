@@ -1,36 +1,41 @@
-!https://travis-ci.org/TalentBox/i18n-sequel_bitemporal.svg?branch=master!:https://travis-ci.org/TalentBox/i18n-sequel_bitemporal
+[![Build Status](https://travis-ci.org/TalentBox/i18n-sequel_bitemporal.svg?branch=master)](https://travis-ci.org/TalentBox/i18n-sequel_bitemporal)
 
-h1. I18n::Backend::SequelBitemporal
+# I18n::Backend::SequelBitemporal
 
-This repository contains an "I18n":http://github.com/svenfuchs/i18n Sequel
-backend storing translations using a bitemporal approach. This allows you go back in time
-in your translations and schedule new translations to appears in the future without
+This repository contains an [I18n](http://github.com/svenfuchs/i18n)
+Sequel
+backend storing translations using a bitemporal approach. This allows
+you go back in time
+in your translations and schedule new translations to appears in the
+future without
 needing any cron task to run.
 
-Most of the code is a port of the "ActiveRecord backend":http://github.com/svenfuchs/i18n-activerecord from SvenFuchs.
+Most of the code is a port of the [ActiveRecord
+backend](http://github.com/svenfuchs/i18n-activerecord) from SvenFuchs.
 
-It's compatible with I18n >= 1.0.0 (Rails 5.x)
+It’s compatible with I18n \>= 1.0.0 (Rails 5.x)
 
-h2. Installation
+## Installation
 
 For Bundler put the following in your Gemfile:
 
-<pre>
+```
   gem 'i18n-sequel_bitemporal', :require => 'i18n/sequel_bitemporal'
-</pre>
+```
 
-or to track master's HEAD:
+or to track master’s HEAD:
 
-<pre>
+```
   gem 'i18n-sequel_bitemporal',
       :github => 'TalentBox/i18n-sequel_bitemporal',
       :require => 'i18n/sequel_bitemporal'
-</pre>
+```
 
-Next create a sequel migration with the Rails Generator (if you're using rails-sequel).
+Next create a sequel migration with the Rails Generator (if you’re using
+rails-sequel).
 Your migration should look like this:
 
-<pre>
+```
   class CreateI18nTranslationsMigration < Sequel::Migration
 
     def up
@@ -60,24 +65,27 @@ Your migration should look like this:
     end
 
   end
-</pre>
+```
 
-With these translation tables you will be able to manage your translation, and add new translations or languages.
+With these translation tables you will be able to manage your
+translation, and add new translations or languages.
 
-To load @I18n::Backend::SequelBitemporal@ into your Rails application, create a new file in *config/initializers* named *locale.rb*.
+To load `I18n::Backend::SequelBitemporal` into your Rails application,
+create a new file in **config/initializers** named **locale.rb**.
 
 A simple configuration for your locale.rb could look like this:
 
-<pre>
+```
   require 'i18n/backend/sequel_bitemporal'
   I18n.backend = I18n::Backend::SequelBitemporal.new
-</pre>
+```
 
-A more advanced example (Thanks Moritz), which uses YAML files and ActiveRecord for lookups:
+A more advanced example (Thanks Moritz), which uses YAML files and
+ActiveRecord for lookups:
 
 Memoization is highly recommended if you use a DB as your backend.
 
-<pre>
+```
   require 'i18n/backend/sequel_bitemporal'
   I18n.backend = I18n::Backend::SequelBitemporal.new
 
@@ -87,46 +95,44 @@ Memoization is highly recommended if you use a DB as your backend.
   I18n::Backend::Simple.send(:include, I18n::Backend::Pluralization)
 
   I18n.backend = I18n::Backend::Chain.new(I18n::Backend::Simple.new, I18n.backend)
-</pre>
+```
 
 You can also customize table names for the backing models:
 
-<pre>
+```
   require 'i18n/backend/sequel_bitemporal'
   I18n::Backend::SequelBitemporal.master_table_name = :my_translations
   I18n::Backend::SequelBitemporal.version_table_name = :my_translation_versions
-</pre>
+```
 
-Please note names can be anything you can use in `Sequel::Model#set_dataset`.
+Please note names can be anything you can use in
+\`Sequel::Model\#set\_dataset\`.
 For example you want your translations table to be in a specific schema:
 
-<pre>
+```
   require 'i18n/backend/sequel_bitemporal'
   I18n::Backend::SequelBitemporal.master_table_name = Sequel.qualify(:translations, :i18n_translations)
   I18n::Backend::SequelBitemporal.version_table_name = Sequel.qualify(:translations, :i18n_translation_versions)
-</pre>
+```
 
-h2. Usage
+## Usage
 
-You can now use @I18n.t('Your String')@ to lookup translations in the database.
+You can now use `I18n.t('Your String')` to lookup translations in the
+database.
 
-h2. Runnning tests
+## Runnning tests
 
-<pre>
-gem install bundler
-BUNDLE_GEMFILE=ci/Gemfile.rails-5.x bundle
-BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 bundle
-BUNDLE_GEMFILE=ci/Gemfile.rails-5.x rake
-BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 rake
-</pre>
+    gem install bundler
+    BUNDLE_GEMFILE=ci/Gemfile.rails-5.x bundle
+    BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 bundle
+    BUNDLE_GEMFILE=ci/Gemfile.rails-5.x rake
+    BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 rake
 
 If you want to see what queries are executed:
 
-<pre>
-DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-5.x rake
-DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 rake
-</pre>
+    DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-5.x rake
+    DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 rake
 
-h2. Maintainers
+## Maintainers
 
-* Jonathan Tron
+  - Jonathan Tron

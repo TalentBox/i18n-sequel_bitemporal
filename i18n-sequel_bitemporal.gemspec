@@ -10,7 +10,6 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/TalentBox/i18n-sequel_bitemporal"
   s.summary      = "I18n Bitemporal Sequel backend"
   s.description  = "I18n Bitemporal Sequel backend. Allows to store translations in a database using Sequel using a bitemporal approach, e.g. for providing a web-interface for managing translations."
-  s.rubyforge_project = "[none]"
 
   s.platform     = Gem::Platform::RUBY
 

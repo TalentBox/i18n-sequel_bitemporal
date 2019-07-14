@@ -24,6 +24,7 @@ module I18n
       end
 
       module Implementation
+        using I18n::HashRefinements if defined?(I18n::HashRefinements)
         include Base, Flatten
 
         def initialize(opts= {})

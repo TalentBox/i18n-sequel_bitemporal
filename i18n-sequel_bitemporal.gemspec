@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "i18n", ">= 1.0.0"
   s.add_dependency "sequel_bitemporal", ">= 0.8.0"
+  s.add_dependency "activesupport", ">= 4.0.2"
 end

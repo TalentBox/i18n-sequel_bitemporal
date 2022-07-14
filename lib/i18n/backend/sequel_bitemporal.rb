@@ -1,4 +1,5 @@
 require 'i18n/backend/base'
+require 'active_support/core_ext/hash/keys'
 
 module I18n
   module Backend

@@ -52,6 +52,21 @@ class I18nBackendSequelBitemporalTest < I18nBitemporalTest
     assert_equal [], translations.map(&:value)
   end
 
+  test "use today as the default valid from for the new translation" do
+    I18n.backend.store_translations(:es, {:"Pagina's" => "Pagina's"} )
+    translation = I18n::Backend::SequelBitemporal::Translation.locale(:es).lookup("Pagina's").limit(1).all.first
+    assert_equal "Pagina's", translation.value
+    assert_equal Date.today, translation.current_version.valid_from
+  end
+
+  test "can specify valid from for the new translation" do
+    valid_from_for_new = Date.parse("2001-01-01")
+    I18n.backend.store_translations(:es, {:"Pagina's" => "Pagina's"}, valid_from_for_new: valid_from_for_new )
+    translation = I18n::Backend::SequelBitemporal::Translation.locale(:es).lookup("Pagina's").limit(1).all.first
+    assert_equal "Pagina's", translation.value
+    assert_equal valid_from_for_new, translation.current_version.valid_from
+  end
+
   with_mocha do
     test "missing translations table does not cause an error in #available_locales" do
       I18n::Backend::SequelBitemporal::Translation.expects(:available_locales).raises(::Sequel::Error)

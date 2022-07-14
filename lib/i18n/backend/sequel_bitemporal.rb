@@ -43,6 +43,7 @@ module I18n
 
         def store_translations(locale, data, options = {})
           escape = options.fetch(:escape, true)
+          valid_from_for_new = options[:valid_from_for_new]
           flatten_translations(locale, data, escape, false).each do |key, value|
             # Invalidate all keys matching current one:
             # key = foo.bar invalidates foo, foo.bar and foo.bar.*
@@ -53,6 +54,7 @@ module I18n
               translation = Translation.locale(locale).lookup_exactly(expand_keys(key)).limit(1).all.first ||
                             Translation.new(:locale => locale.to_s, :key => key.to_s)
               translation.attributes = {:value => value}
+              translation.attributes[:valid_from] = valid_from_for_new if translation.new?
               translation.save
             end
           end

@@ -44,6 +44,7 @@ module I18n
 
         def store_translations(locale, data, options = {})
           escape = options.fetch(:escape, true)
+          point_in_time_for_new = options[:point_in_time_for_new]
           valid_from_for_new = options[:valid_from_for_new]
           flatten_translations(locale, data, escape, false).each do |key, value|
             # Invalidate all keys matching current one:
@@ -56,7 +57,13 @@ module I18n
                             Translation.new(:locale => locale.to_s, :key => key.to_s)
               translation.attributes = {:value => value}
               translation.attributes[:valid_from] = valid_from_for_new if translation.new?
-              translation.save
+              if point_in_time_for_new && translation.new?
+                ::Sequel::Plugins::Bitemporal.as_we_knew_it point_in_time_for_new do
+                  translation.save
+                end
+              else
+                translation.save
+              end
             end
           end
         end

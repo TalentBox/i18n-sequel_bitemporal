@@ -67,6 +67,24 @@ class I18nBackendSequelBitemporalTest < I18nBitemporalTest
     assert_equal valid_from_for_new, translation.current_version.valid_from
   end
 
+  test "can specify point in time for the new translation" do
+    point_in_time_for_new = Time.parse("2001-01-01T12:00:00Z")
+    I18n.backend.store_translations(:es, {:"Pagina's" => "Pagina's"}, point_in_time_for_new: point_in_time_for_new )
+    translation = I18n::Backend::SequelBitemporal::Translation.locale(:es).lookup("Pagina's").limit(1).all.first
+    assert_equal "Pagina's", translation.value
+    assert_equal point_in_time_for_new, translation.current_version.created_at
+  end
+
+  test "can specify both point in time and valid_from for the new translation" do
+    point_in_time_for_new = Time.parse("2001-01-01T12:00:00Z")
+    valid_from_for_new = Date.parse("2001-01-01")
+    I18n.backend.store_translations(:es, {:"Pagina's" => "Pagina's"}, point_in_time_for_new: point_in_time_for_new, valid_from_for_new: valid_from_for_new )
+    translation = I18n::Backend::SequelBitemporal::Translation.locale(:es).lookup("Pagina's").limit(1).all.first
+    assert_equal "Pagina's", translation.value
+    assert_equal point_in_time_for_new, translation.current_version.created_at
+    assert_equal valid_from_for_new, translation.current_version.valid_from
+  end
+
   with_mocha do
     test "missing translations table does not cause an error in #available_locales" do
       I18n::Backend::SequelBitemporal::Translation.expects(:available_locales).raises(::Sequel::Error)

@@ -102,6 +102,7 @@ module I18n
 
       class Translation < ::Sequel::Model(::I18n::Backend::SequelBitemporal.master_table_name)
         extend Forwardable
+        plugin :def_dataset_method
         plugin :bitemporal, version_class: TranslationVersion
 
         delegate [:value, :interpolations, :interpolates?] => :pending_or_current_version

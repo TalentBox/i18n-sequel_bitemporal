@@ -5,18 +5,13 @@ require "optparse"
 module I18n
   module Tests
     class << self
-      def options
-        @options ||= { :with => [], :adapter => "sqlite3" }
-      end
-
       def parse_options!
-        OptionParser.new do |o|
-          o.on("-w", "--with DEPENDENCIES", "Define dependencies") do |dep|
-            options[:with] = dep.split(",").map { |group| group.to_sym }
-          end
-        end.parse!
-
-        options[:adapter] = ENV["ADAPTER"] || "postgres"
+        options[:adapter] = ENV.fetch "TEST_ADAPTER", "sqlite"
+        options[:database] = ENV.fetch "TEST_DATABASE", ":memory:"
+        options[:host] = ENV.fetch "TEST_DATABASE_HOST", nil
+        options[:user] = ENV.fetch "TEST_DATABASE_USERNAME", nil
+        options[:password] = ENV.fetch "TEST_DATABASE_PASSWORD", nil
+        options[:encoding] = ENV.fetch "TEST_ENCODING", nil
       end
 
       def setup_sequel
@@ -38,9 +33,11 @@ module I18n
         connect_adapter
         ::Sequel.extension :migration
         opts = {}
-        opts[:cascade] = true if options[:adapter].to_sym==:postgres
-        ::Sequel::Model.db.drop_table? :i18n_translations, opts
+        opts[:cascade] = true if postgresql?
+        ::Sequel::Model.db.drop_table? :another_i18n_translation_versions, opts
+        ::Sequel::Model.db.drop_table? :another_i18n_translations, opts
         ::Sequel::Model.db.drop_table? :i18n_translation_versions, opts
+        ::Sequel::Model.db.drop_table? :i18n_translations, opts
         ::Sequel.migration do
           change do
             create_table :i18n_translations do
@@ -66,33 +63,44 @@ module I18n
       end
 
       def connect_adapter
-        logger = nil
+        connect_options = options.dup
         if ENV["DEBUG"]
           require "logger"
-          logger =  Logger.new STDOUT
+          connect_options = options.merge! :logger => Logger.new(STDOUT)
         end
-        case options[:adapter].to_sym
-        when :sqlite3
-          if (defined?(RUBY_ENGINE) && RUBY_ENGINE=="jruby") || defined?(JRUBY_VERSION)
-            ::Sequel.connect("jdbc:sqlite::memory:", :logger => logger)
-          else
-            ::Sequel.sqlite(":memory:", :logger => logger)
-          end
-        when :postgres
-          if (defined?(RUBY_ENGINE) && RUBY_ENGINE=="jruby") || defined?(JRUBY_VERSION)
-            ::Sequel.connect("jdbc:postgresql://localhost/i18n_sequel_bitemporal", :logger => logger)
-          else
-            ::Sequel.postgres("i18n_sequel_bitemporal", :logger => logger)
-          end
-        when :mysql
-          # CREATE DATABASE i18n_unittest;
-          # CREATE USER "i18n"@"localhost" IDENTIFIED BY "";
-          # GRANT ALL PRIVILEGES ON i18n_unittest.* to "i18n"@"localhost";
-          if (defined?(RUBY_ENGINE) && RUBY_ENGINE=="jruby") || defined?(JRUBY_VERSION)
-            ::Sequel.connect("jdbc:mysql://localhost/i18n_sequel_bitemporal", :logger => logger)
-          else
-            ::Sequel.mysql(:database => "i18n_unittest", :user => "i18n", :password => "", :host => "localhost", :logger => logger)
-          end
+        ::Sequel.connect(connect_options.merge(:adapter => adapter))
+      end
+
+      private
+
+      def options
+        @options ||= {}
+      end
+
+      def jruby?
+        (defined?(RUBY_ENGINE) && RUBY_ENGINE=="jruby") || defined?(JRUBY_VERSION)
+      end
+
+      def postgresql?
+        options[:adapter] == "postgresql"
+      end
+
+      def sqlite?
+        options[:adapter] == "sqlite"
+      end
+
+      def mysql?
+        options[:adapter] == "mysql2"
+      end
+
+      def adapter
+        case options[:adapter]
+        when "sqlite", "sqlite3"
+          jruby? ? "jdbc:sqlite:" : "sqlite"
+        when "postgresql", "postgres"
+          jruby? ? "jdbc:postgresql" : "postgresql"
+        when "mysql", "mysql2"
+          jruby? ? "jdbc:mysql" : "mysql2"
         end
       end
     end

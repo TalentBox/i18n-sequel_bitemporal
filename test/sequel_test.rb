@@ -97,7 +97,7 @@ class I18nBackendSequelBitemporalTest < I18nBitemporalTest
   end
 
   test "allows to override the table names" do
-    ::Sequel::Model.db.transaction :rollback => :always do
+    ::Sequel::Model.db.transaction :rollback => :always, savepoint: :only do
       begin
         ::Sequel.migration do
           change do
@@ -143,8 +143,12 @@ class I18nBackendSequelBitemporalTest < I18nBitemporalTest
   def change_table_names(master_name, version_name)
     ::I18n::Backend::SequelBitemporal.master_table_name = master_name
     ::I18n::Backend::SequelBitemporal.version_table_name = version_name
-    ::I18n::Backend::SequelBitemporal.send :remove_const, :Translation
-    ::I18n::Backend::SequelBitemporal.send :remove_const, :TranslationVersion
+    if ::I18n::Backend::SequelBitemporal.const_defined?(:Translation)
+      ::I18n::Backend::SequelBitemporal.send :remove_const, :Translation
+    end
+    if ::I18n::Backend::SequelBitemporal.const_defined?(:TranslationVersion)
+      ::I18n::Backend::SequelBitemporal.send :remove_const, :TranslationVersion
+    end
     load File.expand_path(
       "../../lib/i18n/backend/sequel_bitemporal/translation.rb",
       __FILE__

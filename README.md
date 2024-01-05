@@ -122,16 +122,52 @@ database.
 
 ## Runnning tests
 
-    gem install bundler
-    BUNDLE_GEMFILE=ci/Gemfile.rails-5.x bundle
-    BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 bundle
-    BUNDLE_GEMFILE=ci/Gemfile.rails-5.x rake
-    BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 rake
+```shell
+# Create db for mysql tests
+mysql -e 'create database i18n_sequel_bitemporal;' --host 127.0.0.1
+# Create db for postgresql tests
+createdb i18n_sequel_bitemporal
 
-If you want to see what queries are executed:
+##
+# Run tests for a specific Rails version
+##
+BUNDLE_GEMFILE="ci/Gemfile.rails-6.1" bundle install
+# MySQL
+BUNDLE_GEMFILE="ci/Gemfile.rails-6.1" TEST_ADAPTER=mysql2 TEST_DATABASE=i18n_sequel_bitemporal TEST_ENCODING="utf8" bundle exec rake test
+# PG
+BUNDLE_GEMFILE="ci/Gemfile.rails-6.1" TEST_ADAPTER=postgresql TEST_DATABASE=i18n_sequel_bitemporal bundle exec rake test
+# Sqlite
+BUNDLE_GEMFILE="ci/Gemfile.rails-6.1" TEST_ADAPTER=sqlite3 TEST_DATABASE=test/database.sqlite3 bundle exec rake test
 
-    DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-5.x rake
-    DEBUG=true BUNDLE_GEMFILE=ci/Gemfile.rails-5.x-i18n-0.6 rake
+##
+# Run tests for a specific Rails version, logging all queries to stdout
+##
+BUNDLE_GEMFILE="ci/Gemfile.rails-6.1" bundle install
+# MySQL
+DEBUG=1 BUNDLE_GEMFILE="ci/Gemfile.rails-6.1" TEST_ADAPTER=mysql2 TEST_DATABASE=i18n_sequel_bitemporal TEST_ENCODING="utf8" bundle exec rake test
+# PG
+DEBUG=1 BUNDLE_GEMFILE="ci/Gemfile.rails-6.1" TEST_ADAPTER=postgresql TEST_DATABASE=i18n_sequel_bitemporal bundle exec rake test
+# Sqlite
+DEBUG=1 BUNDLE_GEMFILE="ci/Gemfile.rails-6.1" TEST_ADAPTER=sqlite3 TEST_DATABASE=test/database.sqlite3 bundle exec rake test
+
+##
+# Example to run tests for every supported Rails version.
+# !! Some Rails versions are not compatible with all Ruby versions !!
+##
+for gemfile in (ls ci/Gemfile.rails-* | grep -v lock);
+  echo $gemfile
+  BUNDLE_GEMFILE=$gemfile bundle install
+
+  # MySQL
+  BUNDLE_GEMFILE=$gemfile TEST_ADAPTER=mysql2 TEST_DATABASE=i18n_sequel_bitemporal TEST_ENCODING="utf8" bundle exec rake test
+
+  # PG
+  BUNDLE_GEMFILE=$gemfile TEST_ADAPTER=postgresql TEST_DATABASE=i18n_sequel_bitemporal bundle exec rake test
+
+  # Sqlite
+  BUNDLE_GEMFILE=$gemfile TEST_ADAPTER=sqlite3 TEST_DATABASE=test/database.sqlite3 bundle exec rake test
+end
+```
 
 ## Maintainers
 

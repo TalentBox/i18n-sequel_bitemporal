@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/TalentBox/i18n-sequel_bitemporal.svg?branch=master)](https://travis-ci.org/TalentBox/i18n-sequel_bitemporal)
+[![Build Status](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)](https://github.com/TalentBox/i18n-sequel_bitemporal/actions)
 
 # I18n::Backend::SequelBitemporal
 

@@ -143,7 +143,12 @@ module I18n
           end
 
           def all_for_locale(locale)
-            self.locale(locale).with_current_version.all
+            self.locale(locale).with_current_version.select(
+              :locale,
+              :key,
+              :value,
+              :is_proc
+            ).all
           end
         end
       end

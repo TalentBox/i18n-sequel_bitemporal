@@ -10,8 +10,8 @@ module I18n
         options[:database] = ENV.fetch "TEST_DATABASE", ":memory:"
         options[:host] = ENV.fetch "TEST_DATABASE_HOST", nil
         options[:port] = ENV.fetch "TEST_DATABASE_PORT", nil
-        options[:user] = ENV.fetch "TEST_DATABASE_USERNAME", nil
-        options[:password] = ENV.fetch "TEST_DATABASE_PASSWORD", nil
+        options[:user] = ENV.fetch "TEST_USERNAME", nil
+        options[:password] = ENV.fetch "TEST_PASSWORD", nil
         options[:encoding] = ENV.fetch "TEST_ENCODING", nil
       end
 

@@ -73,9 +73,10 @@ module I18n
             @translations.keys.each{|loc| clear loc, options }
           else
             last_update = options[:last_update]
-            cache_time = @cache_times[locale]
+            cache_key = cache_key_of locale
+            cache_time = @cache_times[cache_key]
             return if last_update && cache_time && last_update < cache_time
-            @translations[locale] = nil
+            @translations[cache_key] = nil
           end
         end
 
@@ -83,11 +84,12 @@ module I18n
 
         def fetch_all_translations(locale)
           @translations ||= {}
-          @translations[locale] ||= begin
-            @cache_times[locale] = Time.now
+          cache_key = cache_key_of locale
+          @translations[cache_key] ||= begin
+            @cache_times[cache_key] = Time.now
             Translation.all_for_locale(locale).group_by(&:key)
           end
-          @translations[locale]
+          @translations[cache_key]
         end
 
         def lookup(locale, key, scope = [], options = {})
@@ -117,6 +119,10 @@ module I18n
           key.to_s.split(FLATTEN_SEPARATOR).inject([]) do |keys, key|
             keys << [keys.last, key].compact.join(FLATTEN_SEPARATOR)
           end
+        end
+
+        def cache_key_of(locale)
+          locale
         end
       end
 
